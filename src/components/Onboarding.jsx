@@ -13,36 +13,43 @@ const Onboarding = () => {
     const navigate = useNavigate()
     
     const isEmailValid = () => {
-        if(email.current != user.emailAddresses[0].emailAddress){
+        if(email.current != user.emailAddresses[0].emailAddress || email.current == null){
             setEmailValid(false)
+            return false
         }
+        return true
     }
     const isUsernameValid = () => {
         if(username.current != user.username){
             setUsernameValid(false)
+            return false
         }
+        return true
     }
     const isDiagnosedValid = () => {
         if(typeof diagnosed.current != 'string'){
             setDiagnosedValid(false)
+            return false
         }
+        return true
     }
     const handleSubmit = (e) => {
         e.preventDefault()
-        isEmailValid()
-        isUsernameValid()
-        isDiagnosedValid()
-        if(emailValid && usernameValid && diagnosedValid){
+        
+        if(isEmailValid() && isUsernameValid() && isDiagnosedValid()){
             let info = {
                 userId:user.id,
-                email:email,
-                username: username,
+                email:email.current,
+                username: username.current,
                 diagnosed: diagnosed.current
             }
             console.log(info)
             console.log(user)
             navigate('/home')
 
+        }
+        else{
+            console.log("error")
         }
         //info obejct will be sent to backend /register
         //after receving response from backend, user will be redirected to /home screen
